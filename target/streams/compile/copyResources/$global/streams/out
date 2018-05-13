@@ -1,5 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0mCopy resource mappings: [0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/conf/logback.xml,/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/target/scala-2.12/classes/logback.xml)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/conf/messages,/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/target/scala-2.12/classes/messages)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/conf/application.conf,/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/target/scala-2.12/classes/application.conf)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/conf/routes,/Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/target/scala-2.12/classes/routes)[0m
