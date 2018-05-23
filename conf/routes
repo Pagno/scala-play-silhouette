@@ -3,13 +3,21 @@
 # ~~~~
 
 # Swagger API
-GET         /swagger.json                                                   controllers.ApiHelpController.getResources
-GET         /docs                                                           controllers.ApplicationController.redirectDocs
+GET             /swagger.json                                  controllers.ApiHelpController.getResources
+GET             /docs                                          controllers.ApplicationController.redirectDocs
+
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET             /assets/*file                                  controllers.Assets.versioned(path="/public", file: Asset)
 
-# An example controller showing a sample home page
-GET     /                           controllers.ApplicationController.index
 
+GET             /                                               controllers.ApplicationController.index
+GET             /badPassword                                    controllers.ApplicationController.badPassword
+GET             /colors                                         controllers.ApplicationController.colors
+
+#Authentication
 + nocsrf
-POST    /signin                     controllers.CredentialsAuthController.submit
+POST            /api/auth/signin/credentials                    controllers.CredentialsAuthController.authenticate
+GET             /signin                                         controllers.CredentialsAuthController.view
+GET             /api/auth/logged                                controllers.CredentialsAuthController.logged
++ nocsrf
+POST            /api/auth/signup                                controllers.CredentialsAuthController.signUp
