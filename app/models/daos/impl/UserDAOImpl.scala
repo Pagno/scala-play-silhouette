@@ -65,8 +65,29 @@ class UserDAOImpl @Inject()(
     * @return The saved user.
     */
   def save(user: User) = {
-    users += (user.userID -> user)
-    Future.successful(user)
+    val userUuid = UUID.randomUUID()
+    val ret=db.run(
+      sqlu"""
+            INSERT INTO scalaplaytest.`USER` (ID, FIRST_NAME, LAST_NAME, EMAIL, AVATAR_URL, ACTIVATED)
+            VALUES(${user.userID.toString}, ${user.firstName}, ${user.lastName}, ${user.email},${user.avatarURL}, ${user.activated})
+            """
+    ).map(_ => user)
+
+    db.run(
+      sqlu"""
+            INSERT INTO scalaplaytest.LOGIN_INFO (ID, PROVIDER_ID, PROVIDER_KEY)
+            VALUES(${userUuid.toString}, ${user.loginInfo.providerID }, ${user.loginInfo.providerKey})
+            """
+    )
+
+    db.run(
+      sqlu"""
+            INSERT INTO scalaplaytest.USER_LOGIN_INFO (USER_ID, LOGIN_INFO_ID)
+            VALUES(${user.userID.toString}, ${userUuid.toString});
+            """
+    )
+
+    ret
   }
 
 }

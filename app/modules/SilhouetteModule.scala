@@ -4,7 +4,7 @@ import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.actions.{SecuredErrorHandler, UnsecuredErrorHandler}
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder, Signer}
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import com.mohiva.play.silhouette.api.repositories.{AuthInfoRepository, AuthenticatorRepository}
 import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
 import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.api.util.{PasswordHasherRegistry, _}
@@ -15,7 +15,7 @@ import com.mohiva.play.silhouette.impl.services.GravatarService
 import com.mohiva.play.silhouette.impl.util.{DefaultFingerprintGenerator, SecureRandomIDGenerator}
 import com.mohiva.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
-import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
+import com.mohiva.play.silhouette.persistence.repositories.{CacheAuthenticatorRepository, DelegableAuthInfoRepository}
 import models.daos.UserDAO
 import models.daos.impl.{PasswordInfoDAOImpl, UserDAOImpl}
 import service.UserService
@@ -23,6 +23,7 @@ import service.impl.UserServiceImpl
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.ws.WSClient
+import repository.AuthenticatorRepositoryImpl
 import slick.jdbc.MySQLProfile.api._
 import utils.auth.{CustomSecuredErrorHandler, CustomUnsecuredErrorHandler, DefaultEnv}
 
@@ -44,6 +45,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
 
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl]
+    //bind[AuthenticatorRepository[PasswordInfo]].to[AuthenticatorRepositoryImpl]
   }
 
   @Provides
@@ -87,15 +89,21 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideAuthenticatorService(@Named("authenticator-crypter") crypter: Crypter,
                                   idGenerator: IDGenerator,
                                   configuration: Configuration,
+                                  repository : AuthenticatorRepository[JWTAuthenticator],
                                   clock: Clock): AuthenticatorService[JWTAuthenticator] = {
 
     val settings = JWTAuthenticatorSettings(sharedSecret = configuration.get[String]("play.http.secret.key"))
     val encoder = new CrypterAuthenticatorEncoder(crypter)
     //val authenticatorRepository = new AuthenticatorRepositoryImpl(reactiveMongoApi)
 
-    new JWTAuthenticatorService(settings, None, encoder, idGenerator, clock)
+    new JWTAuthenticatorService(settings, Some(repository), encoder, idGenerator, clock)
   }
 
+
+  @Provides
+  def provideAuthenticatorRepository(): AuthenticatorRepository[JWTAuthenticator] = {
+    new AuthenticatorRepositoryImpl()
+  }
 
   @Provides
   def provideSocialProviderRegistry(): SocialProviderRegistry = {

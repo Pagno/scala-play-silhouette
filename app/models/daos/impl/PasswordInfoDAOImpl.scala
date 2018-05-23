@@ -55,6 +55,7 @@ class PasswordInfoDAOImpl @Inject()(
   }
 
   override def save(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[PasswordInfo] ={
+
     db.run(
       sqlu"""insert into PASSWORD_INFO
             VALUES (${authInfo.hasher},${authInfo.password},${authInfo.salt},(select li.id from LOGIN_INFO li where li.PROVIDER_ID = ${loginInfo.providerID} and li.PROVIDER_KEY =${loginInfo.providerKey}));"""
