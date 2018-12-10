@@ -28,7 +28,7 @@ class UserDAOImpl @Inject()(
     * @return The found user or None if no user for the given login info could be found.
     */
   def find(loginInfo: LoginInfo): Future[Option[User]] = {
-
+    System.out.println("A: "+loginInfo);
     implicit val getUserResult = GetResult(r => DBUser(r.<<, r.<<,r.<<, r.<<,r.<<, r.<<))
 
     db.run(
@@ -56,7 +56,9 @@ class UserDAOImpl @Inject()(
     * @param userID The ID of the user to find.
     * @return The found user or None if no user for the given ID could be found.
     */
-  def find(userID: UUID) = Future.successful(users.get(userID))
+  def find(userID: UUID) = {
+    Future.successful(users.get(userID));
+  }
 
   /**
     * Saves a user.

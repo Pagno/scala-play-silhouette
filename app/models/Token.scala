@@ -13,7 +13,10 @@ import play.api.libs.json._
 @ApiModel(description = "Token object")
 case class Token(
                   @ApiModelProperty(value = "token value", readOnly = true) token: String,
-                  @ApiModelProperty(value = "expiry date", readOnly = true) expiresOn: DateTime
+                  @ApiModelProperty(value = "expiry date", readOnly = true) expiresOn: DateTime,
+                  @ApiModelProperty(value = "token value", readOnly = true) name: String,
+                  @ApiModelProperty(value = "token value", readOnly = true) surname: String,
+
 )
 
 object Token {
@@ -22,7 +25,9 @@ object Token {
     def writes(token: Token): JsObject = {
       val json = Json.obj(
         "token" -> token.token,
-        "expiresOn" -> token.expiresOn.toString
+        "expiresOn" -> token.expiresOn.toString,
+        "name" -> token.name,
+        "surname" -> token.surname
       )
 
       json

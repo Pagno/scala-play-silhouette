@@ -3,7 +3,9 @@ organization := "com.pagnoncelli"
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+lazy val root = (project in file(".")).enablePlugins(PlayJava).settings(
+  watchSources ++= (baseDirectory.value / "public/ui" ** "*").get
+)
 
 scalaVersion := "2.12.4"
 val silhouetteVersion = "5.0.3"

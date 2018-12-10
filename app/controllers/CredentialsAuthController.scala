@@ -4,10 +4,11 @@ package controllers
 import java.util.UUID
 
 import com.google.inject.Inject
-import com.mohiva.play.silhouette.api.services.AvatarService
+import services.{UserService}
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.{Credentials, PasswordHasherRegistry}
 import com.mohiva.play.silhouette.impl.exceptions.IdentityNotFoundException
 import com.mohiva.play.silhouette.impl.providers._
@@ -19,7 +20,6 @@ import org.webjars.play.WebJarAssets
 import play.api.Configuration
 import play.api.libs.json.{JsError, Json}
 import play.api.mvc._
-import service.UserService
 import utils.auth.DefaultEnv
 
 import scala.concurrent.Future
@@ -91,7 +91,9 @@ class CredentialsAuthController @Inject()(
                           Json.toJson(
                             Token(
                               token,
-                              expiresOn = authenticator.expirationDateTime
+                              expiresOn = authenticator.expirationDateTime,
+                              name = user.firstName,
+                              surname = user.lastName
                             )
                           )
                         )
@@ -140,7 +142,7 @@ class CredentialsAuthController @Inject()(
             authenticator <- silhouette.env.authenticatorService.create(loginInfo)
             token <- silhouette.env.authenticatorService.init(authenticator)
             result <- silhouette.env.authenticatorService.embed(token,
-              Ok(Json.toJson(Token(token = token, expiresOn = authenticator.expirationDateTime)))
+              Ok(Json.toJson(Token(token = token, expiresOn = authenticator.expirationDateTime,name = user.firstName,surname = user.lastName)))
             )
           } yield {
             val url = routes.ApplicationController.index().absoluteURL()

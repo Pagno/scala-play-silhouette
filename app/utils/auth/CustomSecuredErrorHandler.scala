@@ -1,11 +1,14 @@
 package utils.auth
 
 import javax.inject.Inject
-
 import com.mohiva.play.silhouette.api.actions.SecuredErrorHandler
-import play.api.i18n.{ MessagesApi, I18nSupport, Messages }
-import play.api.mvc.RequestHeader
+import play.api.http.HttpEntity
+import play.api.http.Status.UNAUTHORIZED
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.libs.json.Json
+import play.api.mvc.{RequestHeader, ResponseHeader, Result}
 import play.api.mvc.Results._
+import utils.responses.rest.Bad
 
 import scala.concurrent.Future
 
@@ -25,7 +28,8 @@ class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi) extends
     * @return The result to send to the client.
     */
   override def onNotAuthenticated(implicit request: RequestHeader) = {
-    Future.successful(Redirect(controllers.routes.CredentialsAuthController.view()))
+    //Future.successful(Redirect(controllers.routes.CredentialsAuthController.view()))
+    Future.successful(Result(ResponseHeader(UNAUTHORIZED), body = HttpEntity.NoEntity));
   }
 
   /**

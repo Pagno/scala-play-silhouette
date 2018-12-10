@@ -21,6 +21,7 @@ class PasswordInfoDAOImpl @Inject()(
   lazy val db = Database.forConfig("testdb")
 
   override def find(loginInfo: LoginInfo): Future[Option[PasswordInfo]] = {
+    System.out.println("B: "+loginInfo);
 
     implicit val getUserResult = GetResult(r => PasswordInfo(r.<<, r.<<, r.<<))
 

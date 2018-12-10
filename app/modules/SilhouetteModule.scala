@@ -18,8 +18,8 @@ import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.{CacheAuthenticatorRepository, DelegableAuthInfoRepository}
 import models.daos.UserDAO
 import models.daos.impl.{PasswordInfoDAOImpl, UserDAOImpl}
-import service.UserService
-import service.impl.UserServiceImpl
+import services.UserService
+import services.impl.UserServiceImpl
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.ws.WSClient

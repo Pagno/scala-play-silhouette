@@ -1,0 +1,4 @@
+[error] /Users/Matteo/Documents/Personale/Scala/Progetti/authentication/auth/project/FrontendRunHook.scala:40:39: not found: type InetSocketAddress
+[error]       override def afterStarted(addr: InetSocketAddress): Unit = {
+[error]                                       ^
+[error] one error found

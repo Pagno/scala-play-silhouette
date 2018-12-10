@@ -28,7 +28,6 @@ class AuthenticatorRepositoryImpl  @Inject()(implicit ec: ExecutionContext)
 
   override def find(id: String): Future[Option[JWTAuthenticator]] = {
 
-    println(id)
     implicit val getUserResult = GetResult(r => DBJWTAuthenticator(r.<<, r.<<, r.<<, r.<<, r.<<))
 
     val asd = db.run(
@@ -39,14 +38,10 @@ class AuthenticatorRepositoryImpl  @Inject()(implicit ec: ExecutionContext)
          """.as[DBJWTAuthenticator].headOption
     )
 
-    println(asd)
-
     val asdb = asd . map{dbJWTAuthenticator => dbJWTAuthenticator
       .map {dbJWTAuthenticator =>
-        new JWTAuthenticator(dbJWTAuthenticator.id,new LoginInfo(dbJWTAuthenticator.providerKey,dbJWTAuthenticator.providerId),dbJWTAuthenticator.lastUsedDateTime,dbJWTAuthenticator.expirationDateTime,None,None) }
+        new JWTAuthenticator(dbJWTAuthenticator.id,new LoginInfo(dbJWTAuthenticator.providerId,dbJWTAuthenticator.providerKey),dbJWTAuthenticator.lastUsedDateTime,dbJWTAuthenticator.expirationDateTime,None,None) }
     }
-
-    println(asdb.map(a => a.map(b => b.loginInfo.providerID)) )
 
     asdb
 

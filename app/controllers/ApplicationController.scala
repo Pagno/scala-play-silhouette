@@ -43,4 +43,28 @@ class ApplicationController @Inject()(components: ControllerComponents,
   def colors = Action.async {
     Future.successful(Ok(Json.arr("black", "blue", "green", "red", "white")))
   }
+
+  @ApiOperation(value = "Get colors")
+  def menu = silhouette.SecuredAction.async {
+    Future.successful(Ok(Json.parse(
+      """
+            {
+               "menu":[
+                  {
+                     "id":"1",
+                     "text":"Dashboard",
+                     "to":"/easyOrder/dashboard"  ,
+                     "key":"dashboard"
+                   },
+                   {
+                     "id":"2",
+                     "text":"Logout",
+                     "to":"/logout",
+                     "key":"logout"
+                   }
+               ]
+            }
+            """
+    )))
+  }
 }
